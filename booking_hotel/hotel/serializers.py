@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from booking_hotel.hotel.models import Room, Booking
-from django.core.exceptions import ValidationError
+
+from .models import Booking, Room
+
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ['id', 'description', 'price', 'created_at']
+
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:

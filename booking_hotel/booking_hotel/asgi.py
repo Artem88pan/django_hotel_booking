@@ -1,5 +1,4 @@
-"""
-ASGI config for booking_hotel project.
+"""ASGI config for booking_hotel project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
