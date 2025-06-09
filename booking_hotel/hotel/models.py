@@ -9,6 +9,7 @@ class Room(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
     def __str__(self):
         return f"Апартаменты №{self.id} - {self.description[:20]}..."
@@ -21,6 +22,7 @@ class Booking(models.Model):
     date_end = models.DateField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
     def __str__(self):
         return f"Бронь # {self.id} (Апатаменты №{self.room_id})"
