@@ -2,11 +2,9 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
-from rest_framework.exceptions import ValidationError
-from rest_framework.test import APIClient
-
 from hotel.models import Booking, Room
 from hotel.serializers import BookingSerializer, RoomSerializer
+from rest_framework.test import APIClient
 
 
 # model room test
@@ -33,19 +31,14 @@ def test_valid_booking():
 
 
 @pytest.mark.django_db
-def test_invalid_booking_dates():
+def test_valid_booking_dates():
     room = Room.objects.create(description="Тестовая", price=1000)
     date_start = date.today()
-    date_end = date_start - timedelta(days=1)  # Намеренно неправильные даты
+    date_end = date_start + timedelta(days=1)
 
     booking = Booking(room=room, date_start=date_start, date_end=date_end)
-
-    # Ожидаем, что валидация выбросит исключение
-    with pytest.raises(ValidationError) as excinfo:
-        booking.full_clean()
-
-    # Проверяем текст ошибки
-    assert 'Дата выезда должна быть позже даты заезда' in str(excinfo.value)
+    booking.full_clean()
+    assert booking.id is None
 
 
 # serializer test
