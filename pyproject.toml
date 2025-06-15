@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "django-hotel-booking"
+version = "0.1.0"
+description = ""
+authors = ["Панов Артём <vonap88@mail.ru>"]
+readme = "README.md"
+packages = [
+    { include = "booking_hotel", from = "src" },
+    { include = "hotel", from = "src" }
+]
+[tool.poetry.dependencies]
+python = ">=3.11"
+django = ">=5.2.2,<6.0.0"
+djangorestframework = ">=3.16.0,<4.0.0"
+pytest = ">=8.4.0,<9.0.0"
+pytest-django = ">=4.11.1,<5.0.0"
+pytest-factoryboy = ">=2.7.0,<3.0.0"
+requests = ">=2.32.3,<3.0.0"
+psycopg2-binary = "^2.9.10"
+gunicorn = "^23.0.0"
+python-dotenv = {version = "^1.1.0", extras = ["cli"]}
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.13"
+pre-commit = "^4.2.0"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+fix = true
+unsafe-fixes = true
+exclude = ["migrations", "static", "media", "__pycache__", ".venv", "build", "dist"]
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "B",    # bugbear
+    "DJ",   # Django-specific
+    "I",    # isort (импорты)
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "C90",  # complexity
+    "A",    # builtins
+    "D",    # docstrings
+]
+ignore = [
+    "E501",     # строки длиннее 88 символов
+    "DJ008",    # model __str__ must return str
+    "D100", "D101", "D102", "D103" , "D104", "D105", "D106" #  игнор отсутствие docstring'ов
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
