@@ -1,10 +1,17 @@
+from booking_hotel.settings import *  # noqa: F403
 
-# Переопределяем DATABASES для тестов
+SECRET_KEY = "test-secret-key-for-ci"
+
+
+DEBUG = True
+
+
+ALLOWED_HOSTS = ["*"]
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',  # Используем RAM для ускорения
-        # Или так, если хотите файловую БД:
-        # 'NAME': BASE_DIR / 'test_db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",
     }
 }

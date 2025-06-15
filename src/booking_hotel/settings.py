@@ -8,23 +8,40 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Если в окружении указано, что мы в докере — грузим .env.docker,
+# иначе — просто .env
+env_path = BASE_DIR / (".env.docker" if os.getenv("RUNNING_IN_DOCKER") == "1" else ".env")
+load_dotenv(env_path)
+
+# теперь все os.getenv(...) уже подтянутся из нужного файла
+DEBUG = os.getenv("DEBUG") == "1"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALLOWED_HOSTS = ["*"] if DEBUG else os.getenv("ALLOWED_HOSTS", "").split(",")
+
+# выбор хоста БД
+db_host = os.getenv("DATABASE_HOST") if os.getenv("RUNNING_IN_DOCKER") == "1" else os.getenv("DATABASE_HOST_LOCAL")
+DATABASES = {
+    "default": {
+        "ENGINE":   "django.db.backends.postgresql",
+        "NAME":     os.getenv("DATABASE_NAME"),
+        "USER":     os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST":     db_host,
+        "PORT":     os.getenv("DATABASE_PORT"),
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e0kt-)oj7&+9@-=jf5y-v$n%3!kb8_b&i0b^00n8dy@xp+!_)8'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -72,17 +89,6 @@ WSGI_APPLICATION = 'booking_hotel.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hotel_db',
-        'USER': 'hotel_user',
-        'PASSWORD': 'your_strong_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
 
 
 # Password validation
